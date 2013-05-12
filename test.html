@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta http-equiv="pragma" content="no-cache" /> 
+  <meta http-equiv="Cache-Control" content="no-cache,must-revalidate" /> 
+  <meta http-equiv="expires" content="Wed,26 Feb 1997 08:21:57 GMT" /> 
+  <style type="text/css">
+
+     select.tool {
+       float: left;
+		 margin-left: 4px;
+		 margin-right: 2px;
+		 padding: 2px 3px;
+	 }     
+	 .tool li{
+	      display: block;
+		  float: left;
+		  margin-left: 4px;
+		  margin-right: 2px;
+		  padding: 2px 3px;
+		  border: 1px solid #DDD;
+		  list-style-type: none;
+		  width: 30px;
+		  text-align: center;
+	  }
+	  .tool li:hover {
+	      backgroud-color: #D3D3D3;
+		  border: 2px solid black; 
+	  }
+	  .clear:after {
+	      content: ".";
+		  height: 0px;
+		  visibility: hidden;
+		  display: block;
+		  clear: both;
+	  } 
+	  .clear {
+	      display: inline-block;
+	  }
+	  /*Holly Hack Target IE WIN only \*/
+	  * html.clear{height: 1%;}
+	  .clear { display: block;}
+	  
+	  #richedit {
+	      width: 800px;
+		  height: 400px;
+		  border: 2px solid black;
+	  }
+  
+  </style>
+  
+  </head>
+  <body> 
+	  <div id="tool" class="clear">
+		  <ul class="tool">
+			  <li title="bold"><img src="image/glyphicons_102_bold.png" /></li>
+			  <li title="italic"><img src="image/glyphicons_101_italic.png" /></li>
+			  <li title="underline"><img src="image/glyphicons_103_text_underline.png" /></li>
+		  </ul>
+		  <select id="fontsize" class="tool">
+		      <option value="0" select="true" >字号</option>
+	          <option value="1">1号字</option>
+		      <option value="2">2号字</option>
+			  <option value="3">3号字</option>
+		      <option value="4">4号字</option>
+			  <option value="5">5号字</option>
+		      <option value="6">6号字</option>
+			  <option value="7">7号字</option>
+	      </select>
+		  <select id="fontfamily" class="tool">
+		      <option value="0" select="true" >字体</option>
+	          <option value="宋体">宋体</option>
+		      <option value="黑体">黑体</option>
+			  <option value="楷体">楷体</option>
+		      <option value="隶书">隶书</option>
+			  <option value="幼圆">幼圆</option>
+		      <option value="Arial">Arial</option>
+			  <option value="Times New Roman">Times New Roman</option>
+			  <option value="Courier New">Courier New</option>
+	      </select>
+		  <ul class="tool">
+		      <li title="left"><img src="image/glyphicons_110_align_left.png" /></li>
+			  <li title="center"><img src="image/glyphicons_111_align_center.png" /></li>
+			  <li title="intent"><img src="image/glyphicons_108_left_indent.png" /></li>
+			  <li title="outdent"><img src="image/glyphicons_109_right_indent.png" /></li>
+			  <li title="order"><img src="image/glyphicons_114_list.png" /></li>
+			  <li title="unorder"><img src="image/glyphicons_158_show_lines.png" /></li>
+			  <li title="link"><img src="image/glyphicons_062_paperclip.png" /></li>
+			  <li title="image"><img src="image/glyphicons_138_picture.png" /></li>
+			  <li title="cut"><img src="image/glyphicons_288_scissors.png" /></li>
+		  </ul>
+		  
+	  </div>
+	 
+	  <div id="richedit" class="editable" contenteditable >
+	  
+
+	  
+	  </div>
+	 
+	  <script type="text/javascript" src="common.js"></script>
+	  <script>
+	  (function() {
+	      var fontsize = document.getElementById("fontsize");
+		  var fontfamily = document.getElementById("fontfamily");
+		  var richDiv = document.getElementById("richedit");
+		  RichEdit.init(richDiv);
+		  
+		  var tool = document.getElementById("tool");
+		  
+		  EventUtil.addEventHandler(tool, "click", function(event){
+		      event = EventUtil.getEvent(event);
+			  var target = EventUtil.getTarget(event),
+			      command = target.title ? target.title : target.parentNode.title;
+			
+			  if (command) {
+			      switch (command) {
+				      case "bold":
+					      return RichEdit.bold();
+					  case "italic":
+					      return RichEdit.italic();
+					  case "underline":
+					      return RichEdit.underline();
+					  case "center":
+					      return RichEdit.justifyCenter();
+					  case "left":
+					      return RichEdit.justifyLeft();
+					  case "indent":
+					      return RichEdit.intent();
+					  case "outdent":
+					      return RichEdit.outdent();
+					  case "order":
+					      return RichEdit.insertOrderedlist();
+					  case "unorder":
+					      return RichEdit.insertUnorderedlist();
+					  case "link":
+					      var link = prompt("请输入链接地址", "");
+						  if (link != null) {
+						      return RichEdit.createLink(link);
+						  }
+						  return ;
+					  case "image":
+					      var image = prompt("请输入图片地址", "");
+						  if (image != null) {
+						      return RichEdit.insertImage(image);
+						  } 
+						  return ;
+					  case "cut":
+					      return RichEdit.cut();
+					  default: return;  
+				  }
+			  }
+		  });
+		 
+		  
+		  EventUtil.addEventHandler(fontsize, "change", function(event) {
+		      var size = fontsize.options[fontsize.selectedIndex].value;
+			  RichEdit.fontSize(size);
+		  });
+		  EventUtil.addEventHandler(fontfamily, "change", function(event) {
+		      var name = fontfamily.options[fontfamily.selectedIndex].value;
+			  RichEdit.fontName(name);
+		  });
+	  })();  
+	  </script>  
+  </body>
+</html>
